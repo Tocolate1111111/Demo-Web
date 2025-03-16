@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Đơn Cày Thuê</title>
+    <style>
+        body {
+            background: #ebe5e55a;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            color: black;
+            width: 500px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        select, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        button {
+            background: #ff4d4d;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .popup.active {
+            display: block;
+        }
+        .contact-methods button {
+            background: #007bff;
+            margin: 5px;
+        }
+        #orderCode {
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        #orderCode.copied {
+            color: green;
+        }
+        .copy-message {
+            color: green;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Đặt Đơn Cày Thuê</h1>
+        <label for="package">Chọn Gói Cày Thuê</label>
+        <select id="package">
+            <option value="2m5len30m">2m5 lên 30m - 1,100,000 đ</option>
+            <option value="2m5len20m">2m5 lên 20m bouty - 700,000 đ</option>
+            <option value="2m5len10m">2m5 lên 10m bouty - 300,000 đ</option>
+            <option value="20m">20m bouty - 800,000 đ</option>
+            <option value="10m">10m bouty - 400,000 đ</option>
+            <option value="5m">5m bouty - 200,000 đ</option>
+            <option value="2m">2m bouty - 80,000 đ</option>
+            <option value="1m">1m bouty - 40,000 đ</option>
+        </select>
+        <button id="createOrder">Tạo Đơn Hàng</button>
+    </div>
+
+    <div id="orderPopup" class="popup">
+        <h2>Ấn sao chép xong ib cho tôi để thuê nhé</h2>
+        <p id="orderCode">#</p>
+        <p id="copyMessage" class="copy-message">Đã sao chép mã!</p>
+        <label for="paymentMethod">Chọn phương thức thanh toán</label>
+        <select id="paymentMethod">
+            <option value="facebook">Chọn phương thức thanh toán</option>
+            <option value="facebook">Facebook</option>
+            <option value="discord">Discord</option>
+        </select>
+        <div class="contact-methods">
+            <button id="contactButton" style="display:none;">Liên hệ</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('createOrder').addEventListener('click', function() {
+            const selectedPackage = document.getElementById('package').value;
+            const popup = document.getElementById('orderPopup');
+            document.getElementById('orderCode').textContent = `#${selectedPackage}`;
+            popup.classList.add('active');
+        });
+
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('orderPopup');
+            const container = document.querySelector('.container');
+            if (!popup.contains(event.target) && !container.contains(event.target)) {
+                popup.classList.remove('active');
+            }
+        });
+
+        document.getElementById('orderCode').addEventListener('click', function() {
+            const orderCode = this.textContent;
+            navigator.clipboard.writeText(orderCode).then(() => {
+                this.classList.add('copied');
+                const copyMessage = document.getElementById('copyMessage');
+                copyMessage.style.display = 'block';
+                setTimeout(() => {
+                    this.classList.remove('copied');
+                    copyMessage.style.display = 'none';
+                }, 2000);
+            });
+        });
+
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            document.getElementById('contactButton').style.display = 'block';
+        });
+
+        document.getElementById('contactButton').addEventListener('click', function() {
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            if (paymentMethod === 'facebook') {
+                window.location.href = 'https://www.facebook.com/profile.php?id=100094919380979&locale=vi_VN';
+            } else if (paymentMethod === 'discord') {
+                window.location.href = 'https://discord.gg/2FYQHBGmRx';
+            }
+        });
+    </script>
+</body>
+</html>
